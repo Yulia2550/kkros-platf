@@ -1,0 +1,61 @@
+abstract class Budivlya {
+  void info(); // Метод для виведення інформації про будівлю
+  double ploshcha(); // Метод для обчислення площі
+}
+
+abstract class HromadskaBudivlya implements Budivlya {
+  String name;
+  String adres;
+  int floors;
+
+  HromadskaBudivlya(this.name, this.adres, this.floors);
+
+  // Реалізація методу info частково
+  @override
+  void info() {
+    print('Будівля: $name');
+    print('Адреса: $adres');
+    print('Поверхи: $floors');
+  }
+
+  // Метод ploshcha залишимо абстрактним
+  @override
+  double ploshcha();
+}
+
+class Teatr extends HromadskaBudivlya {
+  int seats; // кількість місць
+  String director; // директор театру
+
+  Teatr(String name, String adres, int floors, this.seats, this.director)
+      : super(name, adres, floors);
+
+  // Перевизначаємо метод info
+  @override
+  void info() {
+    super.info(); // викликаємо базовий info
+    print('Кількість місць: $seats');
+    print('Директор: $director');
+    print('Тип будівлі: Театр');
+  }
+
+  // Реалізація абстрактного методу ploshcha
+  @override
+  double ploshcha() {
+    return floors * 500.0; // наприклад, 500 м² на поверх
+  }
+}
+
+void main() {
+  Teatr teatr1 = Teatr('Національний театр', 'вул. Театральна, 1', 3, 800, 'Іваненко');
+  Teatr teatr2 = Teatr('Міський театр', 'вул. Центральна, 10', 2, 500, 'Петренко');
+
+  List<Teatr> teatri = [teatr1, teatr2];
+
+  for (var t in teatri) {
+    t.info();
+    print('Площа: ${t.ploshcha()} м²');
+    print('----------------------------');
+  }
+}
+

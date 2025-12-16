@@ -1,0 +1,124 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const FootballApp());
+}
+
+class FootballApp extends StatelessWidget {
+  const FootballApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Видатні футболісти',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const FootballListScreen(),
+    );
+  }
+}
+
+class FootballListScreen extends StatefulWidget {
+  const FootballListScreen({super.key});
+
+  @override
+  State<FootballListScreen> createState() => _FootballListScreenState();
+}
+
+class _FootballListScreenState extends State<FootballListScreen> {
+  final List<Map<String, String>> players = [
+    {
+      'name': 'Ліонель Мессі',
+      'info': 'Аргентина, PSG',
+      'image': 'https://celebs.com.ua/wp-content/uploads/2024/09/messi-lionel-biografiya-tsikavi-fakty.jpg',
+    },
+    {
+      'name': 'Кріштіану Роналду',
+      'info': 'Португалія, Al Nassr',
+      'image': 'https://upload.wikimedia.org/wikipedia/commons/d/d7/Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_%28cropped%29.jpg',
+    },
+    {
+      'name': 'Дієго Марадона',
+      'info': 'Аргентина',
+      'image': 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Maradona-Mundial_86_con_la_copa.JPG',
+    },
+    {
+      'name': 'Пеле',
+      'info': 'Бразилія',
+      'image': 'https://upload.wikimedia.org/wikipedia/commons/5/54/Pele_by_John_Mathew_Smith.jpg',
+    },
+    {
+      'name': 'Златан Ібрагімович',
+      'info': 'Швеція, AC Milan',
+      'image': 'https://imgresizer.eurosport.com/unsafe/1200x0/filters:format(jpeg)/origin-imgresizer.eurosport.com/2017/12/14/2229074-46480310-2560-1440.jpg',
+    },
+    {
+      'name': 'Кіліан Мбаппе',
+      'info': 'Франція',
+      'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/2019-07-17_SG_Dynamo_Dresden_vs._Paris_Saint-Germain_by_Sandro_Halank%E2%80%93129_%28cropped%29.jpg/250px-2019-07-17_SG_Dynamo_Dresden_vs._Paris_Saint-Germain_by_Sandro_Halank%E2%80%93129_%28cropped%29.jpg',
+    },
+  ];
+
+  int? selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Видатні футболісти'),
+        centerTitle: true,
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        itemCount: players.length,
+        itemBuilder: (context, index) {
+          final player = players[index];
+          final isSelected = selectedIndex == index;
+
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                selectedIndex = index;
+              });
+            },
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              color: isSelected ? Colors.green[50] : Colors.white,
+              margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+              child: ListTile(
+                leading: CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.grey[200],
+                  child: ClipOval(
+                    child: Image.network(
+                      player['image']!,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                title: Text(
+                  player['name']!,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(player['info']!),
+                trailing: isSelected
+                    ? const Icon(Icons.check_circle, color: Colors.green)
+                    : null,
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

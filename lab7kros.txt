@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.pink[100],
+        body: Center(
+          child: SizedBox(
+            width: 200,
+            height: 110, // 20 + 30 + 60
+            child: Stack(
+              children: [
+                // Синя область
+                Positioned(
+                  top: 50, // 20 + 30
+                  left: 50, // 20 + 30
+                  right: 0,
+                  height: 60,
+                  child: Container(color: Colors.blue),
+                ),
+
+                // Червона горизонтальна смуга — тепер зліва до кінця
+                Positioned(
+                  top: 20,
+                  left: 0, // було 50 — тепер 0, щоб замалювати кут
+                  right: 0,
+                  height: 30,
+                  child: Container(color: Colors.red),
+                ),
+
+                // Жовта горизонтальна смуга
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: 20,
+                  child: Container(
+                    color: Colors.yellow,
+                    alignment: Alignment.center,
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Hi! ',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'NLTU',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Червона вертикальна смуга
+                Positioned(
+                  top: 50,
+                  bottom: 0,
+                  left: 20,
+                  width: 30,
+                  child: Container(color: Colors.red),
+                ),
+
+                // Жовта вертикальна смуга
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  width: 20,
+                  child: Container(color: Colors.yellow),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

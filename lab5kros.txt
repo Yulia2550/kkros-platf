@@ -1,0 +1,95 @@
+import 'dart:async';
+
+class Appointment {
+  String day;
+  int visitors;
+  String comment;
+
+  Appointment(this.day, this.visitors, this.comment);
+
+  @override
+  String toString() {
+    return 'День: $day, Відвідувачів: $visitors, Коментар: "$comment"';
+  }
+}
+
+
+class AppointmentManager<T> {
+  Set<T> items = {};
+
+  void addItem(T item) => items.add(item);
+
+  
+  T? findMin<R extends Comparable>(R Function(T) getValue) {
+    if (items.isEmpty) return null;
+    return items.reduce((a, b) => getValue(a).compareTo(getValue(b)) < 0 ? a : b);
+  }
+
+  
+  double averageValue(num Function(T) getNumber) {
+    if (items.isEmpty) return 0;
+    num total = 0;
+    for (var item in items) total += getNumber(item);
+    return total / items.length;
+  }
+}
+
+// Клас Doctor
+class Doctor {
+  String surname;
+  int experience;
+  AppointmentManager<Appointment> appointments = AppointmentManager();
+
+  Doctor(this.surname, this.experience);
+
+  void addAppointment(Appointment a) => appointments.addItem(a);
+
+  
+  Future<Appointment?> getMinVisitorsAppointmentAsync() async {
+    try {
+      var minApp = appointments.findMin((a) => a.visitors);
+      return Future.value(minApp); 
+    } catch (e) {
+      throw 'Помилка при пошуку мінімального прийому: $e';
+    }
+  }
+
+  Future<double> getAverageVisitorsAsync() {
+    try {
+      return Future.delayed(Duration(seconds: 1),
+          () => appointments.averageValue((a) => a.visitors));
+    } catch (e) {
+      return Future.error('Помилка при обчисленні середнього: $e');
+    }
+  }
+}
+
+Future<void> analyzeDoctorAsync(Doctor doctor) async {
+  try {
+    print(' Обчислюємо середню кількість відвідувачів...');
+    double avg = await doctor.getAverageVisitorsAsync();
+    print('Середня кількість відвідувачів: ${avg.toStringAsFixed(2)}');
+
+    print('\n Знаходимо прийом з мінімальною кількістю відвідувачів...');
+    Appointment? minApp = await doctor.getMinVisitorsAppointmentAsync();
+    print('Прийом з мінімальною кількістю відвідувачів: $minApp');
+  } catch (e) {
+    print('Сталася помилка: $e');
+  }
+}
+
+void main() async {
+  Doctor doctor = Doctor('Савка', 5);
+
+ doctor.addAppointment(
+    Appointment('Понеділок', 12, 'Звичайний день прийому.'),
+  );
+  doctor.addAppointment(
+    Appointment('Вівторок', 5, 'Мало пацієнтів бо всі на морі.'),
+  );
+  doctor.addAppointment(
+    Appointment('Середа', 19, 'Багато пацієнтів через епідемію грипу.'),
+  );
+
+  await analyzeDoctorAsync(doctor); 
+}

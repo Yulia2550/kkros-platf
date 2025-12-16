@@ -1,0 +1,107 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const LabApp());
+}
+
+class LabApp extends StatelessWidget {
+  const LabApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            double b = 250; // ширина верхніх блоків
+            double c = 200; // висота верхніх блоків
+            double d = 150; // висота нижнього блоку
+            double n = 5;   // відступ від краю
+            double p = 4;   // відстань між верхніми блоками
+            double r = 6;   // вертикальний відступ між рядами
+
+            return Stack(
+              children: [
+                // Жовтий блок
+                Positioned(
+                  left: n,
+                  top: n,
+                  width: b,
+                  height: c,
+                  child: CustomBlock(
+                    color: Colors.yellow,
+                    text: "Ще не вмерла Україна, і слава, і воля, ще нам, браття",
+                    width: b,
+                    height: c,
+                  ),
+                ),
+                // Синій блок
+                Positioned(
+                  left: n + b + p,
+                  top: n,
+                  width: b,
+                  height: c,
+                  child: CustomBlock(
+                    color: Colors.lightBlue,
+                    text: "Згинуть наші вороженьки, як роса на сонці, запануєм і ми, браття, у своїй сторонці.",
+                    width: b,
+                    height: c,
+                  ),
+                ),
+                // Білий блок
+                Positioned(
+                  left: n,
+                  top: n + c + r,
+                  width: 2 * b + p,
+                  height: d,
+                  child: CustomBlock(
+                    color: Colors.white,
+                    text: "І покажем, що ми, браття, козацького роду.",
+                    width: 2 * b + p,
+                    height: d,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// Власний віджет як StatefulWidget
+class CustomBlock extends StatefulWidget {
+  final Color color;
+  final String text;
+  final double width;
+  final double height;
+
+  const CustomBlock({
+    super.key,
+    required this.color,
+    required this.text,
+    required this.width,
+    required this.height,
+  });
+
+  @override
+  State<CustomBlock> createState() => _CustomBlockState();
+}
+
+class _CustomBlockState extends State<CustomBlock> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: widget.width,
+      height: widget.height,
+      color: widget.color,
+      padding: const EdgeInsets.all(8),
+      child: Text(
+        widget.text,
+        style: const TextStyle(fontSize: 16),
+      ),
+    );
+  }
+}

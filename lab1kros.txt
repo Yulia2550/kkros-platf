@@ -1,0 +1,37 @@
+import 'dart:math';
+
+void main() {
+  int variant = 11;
+
+  double Y = 4.6 * variant;
+  double Z = 36.6 / variant;
+  double X_p = 1.23 * variant;
+  double X_k = X_p + 10;
+  double dx = 1;
+
+  // Анонімна функція b[x,y,z]
+  double Function(double, double, double) bFunc = (x, y, z) {
+    double numerator = 1 + pow(cos(y - 2 * pow(x, 3).toDouble()), 2).toDouble();
+    double denominator = 2 +
+        pow(x.abs(), 3 / 2).toDouble() * pow(sin(pow(z.abs(), 0.2).toDouble()), 2).toDouble();
+    double logTerm = pow(log((z - y).abs()), 2).toDouble();
+    return numerator / denominator + logTerm;
+  };
+
+  // Зовнішня функція a[x,y,z,b] з замиканням
+  double Function(double) aFunc = (double x) {
+    double b = bFunc(x, Y, Z);
+    double sinTerm = pow(sin(pow((Y + b).abs(), 1.3).toDouble()), 2).toDouble();
+    double numerator = pow(Z + sinTerm, 2).toDouble();
+    double denominator = pow(Z, 2).toDouble() +
+        (x * x / (Y + pow(x, 3) / 3)).abs() -
+        log(x.abs());
+    return Y * Y + numerator / denominator;
+  };
+
+  // Табулювання
+  print('x\t a(x)');
+  for (double x = X_p; x <= X_k; x += dx) {
+    print('${x.toStringAsFixed(2)}\t ${aFunc(x).toStringAsFixed(5)}');
+  }
+}

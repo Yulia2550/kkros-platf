@@ -1,0 +1,78 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const LabApp());
+}
+
+class LabApp extends StatelessWidget {
+  const LabApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            double b = 250; // ширина верхніх блоків
+            double c = 200; // висота верхніх блоків
+            double d = 150; // висота нижнього блоку
+            double n = 5;   // відступ від краю
+            double p = 4;   // відстань між верхніми блоками
+            double r = 6;   // вертикальний відступ між рядами
+
+            return Stack(
+              children: [
+                // Жовтий блок
+                Positioned(
+                  left: n,
+                  top: n,
+                  width: b,
+                  height: c,
+                  child: Container(
+                    color: Colors.yellow,
+                    padding: const EdgeInsets.all(8),
+                    child: const Text(
+                      "Ще не вмерла Україна, і слава, і воля, ще нам, браття",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ),
+                // Синій блок
+                Positioned(
+                  left: n + b + p,
+                  top: n,
+                  width: b,
+                  height: c,
+                  child: Container(
+                    color: Colors.lightBlue,
+                    padding: const EdgeInsets.all(8),
+                    child: const Text(
+                      "Згинуть наші вороженьки, як роса на сонці, запануєм і ми, браття, у своїй сторонці.",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ),
+                // Білий блок
+                Positioned(
+                  left: n,
+                  top: n + c + r,
+                  width: 2 * b + p,
+                  height: d,
+                  child: Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.all(8),
+                    child: const Text(
+                      "І покажем, що ми, браття, козацького роду.",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}

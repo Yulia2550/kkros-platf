@@ -1,0 +1,103 @@
+class Appointment {
+  String day;
+  int visitors;
+  String comment;
+
+  Appointment(this.day, this.visitors, this.comment);
+
+  String get getDay => day;
+  int get getVisitors => visitors;
+  String get getComment => comment;
+
+  set setDay(String value) => day = value;
+  set setVisitors(int value) => visitors = value;
+  set setComment(String value) => comment = value;
+
+  @override
+  String toString() {
+    return 'День: $day, Відвідувачів: $visitors, Коментар: "$comment"';
+  }
+}
+
+class AppointmentManager<T> {
+  Set<T> items = {};
+
+  void addItem(T item) {
+    items.add(item);
+  }
+
+  void showAllItems() {
+    for (var item in items) {
+      print(item);
+    }
+  }
+
+
+  T? findMin<R extends Comparable>(R Function(T) getValue) {
+    if (items.isEmpty) return null;
+    return items.reduce((a, b) => getValue(a).compareTo(getValue(b)) < 0 ? a : b);
+  }
+
+  double averageValue(num Function(T) getNumber) {
+    if (items.isEmpty) return 0;
+    num total = 0;
+    for (var item in items) {
+      total += getNumber(item);
+    }
+    return total / items.length;
+  }
+}
+
+
+class Doctor {
+  String surname;
+  int experience;
+  AppointmentManager<Appointment> appointments = AppointmentManager();
+
+  Doctor(this.surname, this.experience);
+
+  void addAppointment(Appointment appointment) {
+    appointments.addItem(appointment);
+  }
+
+  Appointment? minVisitorsAppointment() {
+    return appointments.findMin((a) => a.visitors);
+  }
+
+
+  Appointment? longestCommentAppointment() {
+    return appointments.findMin((a) => -a.comment.length); 
+  }
+
+  double averageVisitors() {
+    return appointments.averageValue((a) => a.visitors);
+  }
+
+  void showInfo() {
+    print('Лікар: $surname, стаж: $experience років');
+    print('--- Прийоми ---');
+    appointments.showAllItems();
+    print('----------------');
+  }
+}
+
+// -----------------------------
+void main() {
+  Doctor doctor = Doctor('Савка', 5);
+
+  doctor.addAppointment(
+    Appointment('Понеділок', 12, 'Звичайний день прийому.'),
+  );
+  doctor.addAppointment(
+    Appointment('Вівторок', 5, 'Мало пацієнтів бо всі на морі.'),
+  );
+  doctor.addAppointment(
+    Appointment('Середа', 19, 'Багато пацієнтів через епідемію грипу.'),
+  );
+
+  doctor.showInfo();
+
+  print('Середня кількість відвідувачів: ${doctor.averageVisitors().toStringAsFixed(2)}');
+  print('Мінімальна кількість відвідувачів: ${doctor.minVisitorsAppointment()}');
+  print('Найдовший коментар: ${doctor.longestCommentAppointment()}');
+}

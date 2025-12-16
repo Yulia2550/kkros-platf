@@ -1,0 +1,85 @@
+class Appointment {
+  String day;
+  int visitors;
+  String comment;
+
+  Appointment(this.day, this.visitors, this.comment);
+    
+  String get getDay => day;
+  int get getVisitors => visitors;
+  String get getComment => comment;
+
+  set setDay(String value) => day = value;
+  set setVisitors(int value) => visitors = value;
+  set setComment(String value) => comment = value;
+
+  @override
+  String toString() {
+    return 'День: $day, Відвідувачів: $visitors, Коментар: "$comment"';
+  }
+}
+
+class Doctor {
+  String surname;
+  int experience;
+  Set<Appointment> appointments = {};
+
+  Doctor(this.surname, this.experience);
+
+
+  void addAppointment(Appointment appointment) {
+    appointments.add(appointment);
+  }
+
+  double averageVisitors() {
+    if (appointments.isEmpty) return 0;
+    int total = appointments.fold(0, (sum, a) => sum + a.visitors);
+    return total / appointments.length;
+  }
+
+  Appointment? minVisitorsAppointment() {
+    if (appointments.isEmpty) return null;
+    return appointments.reduce((a, b) => a.visitors < b.visitors ? a : b);
+  }
+
+  Appointment? longestCommentAppointment() {
+    if (appointments.isEmpty) return null;
+    return appointments.reduce(
+      (a, b) => a.comment.length > b.comment.length ? a : b,
+    );
+  }
+
+  void showInfo() {
+    print('Лікар: $surname, стаж: $experience років');
+    print('--- Прийоми ---');
+    for (var a in appointments) {
+      print(a);
+    }
+    print('----------------');
+  }
+}
+
+void main() {
+  // Створення лікаря
+  Doctor doctor = Doctor('Савка', 5);
+
+  // Додавання прийомів
+  doctor.addAppointment(
+    Appointment('Понеділок', 12, 'Звичайний день прийому.'),
+  );
+  doctor.addAppointment(
+    Appointment('Вівторок', 5, 'Мало пацієнтів бо всі на морі.'),
+  );
+  doctor.addAppointment(
+    Appointment('Середа', 19, 'Багато пацієнтів через епідемію грипу.'),
+  );
+
+  doctor.showInfo();
+  print(
+    'Середня кількість відвідувачів: ${doctor.averageVisitors().toStringAsFixed(2)}',
+  );
+  print(
+    'Прийом з мінімальною кількістю відвідувачів: ${doctor.minVisitorsAppointment()}',
+  );
+  print('Прийом з найдовшим коментарем: ${doctor.longestCommentAppointment()}');
+}
